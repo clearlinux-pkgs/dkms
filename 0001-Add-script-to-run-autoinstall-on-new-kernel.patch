@@ -1,0 +1,35 @@
+From c49caace920000ba7e9a5ae9fc23f46d610ac3b1 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Tue, 15 Jan 2019 14:58:11 -0800
+Subject: [PATCH] Add script to run autoinstall on new kernel
+
+---
+ dkms-new-kernel.sh | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100755 dkms-new-kernel.sh
+
+diff --git a/dkms-new-kernel.sh b/dkms-new-kernel.sh
+new file mode 100755
+index 0000000..bef1b1a
+--- /dev/null
++++ b/dkms-new-kernel.sh
+@@ -0,0 +1,16 @@
++#!/bin/sh
++
++CUR="`uname -r`"
++SUF="`uname -r| sed 's/.*[.]//'`"
++DEF="/usr/lib/kernel/default-$SUF"
++
++if [ ! -e $DEF ]; then
++	exit 0
++fi
++
++NEW="`readlink $DEF | sed 's/org.clearlinux.\([a-z+]*\).\(.*\)/\2.\1/'`"
++
++if [ "$CUR" != "$NEW" ]; then
++	echo "Running DKMS for new kernel $NEW"
++	dkms autoinstall -k "${NEW}"
++fi
+-- 
+2.20.0
+

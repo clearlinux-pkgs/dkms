@@ -4,15 +4,18 @@
 #
 Name     : dkms
 Version  : 2.6.1
-Release  : 1
+Release  : 2
 URL      : https://github.com/dell/dkms/archive/v2.6.1.tar.gz
 Source0  : https://github.com/dell/dkms/archive/v2.6.1.tar.gz
+Source1  : dkms-new-kernel.service
 Summary  : megaraid2 dkms package
 Group    : Development/Tools
 License  : GPL-2.0 GPL-2.0+
 Requires: dkms-bin = %{version}-%{release}
 Requires: dkms-license = %{version}-%{release}
 Requires: dkms-man = %{version}-%{release}
+Requires: dkms-services = %{version}-%{release}
+Patch1: 0001-Add-script-to-run-autoinstall-on-new-kernel.patch
 
 %description
 Kernel modules for %{module_name} %{version} in a DKMS wrapper.
@@ -22,6 +25,7 @@ Summary: bin components for the dkms package.
 Group: Binaries
 Requires: dkms-license = %{version}-%{release}
 Requires: dkms-man = %{version}-%{release}
+Requires: dkms-services = %{version}-%{release}
 
 %description bin
 bin components for the dkms package.
@@ -43,25 +47,43 @@ Group: Default
 man components for the dkms package.
 
 
+%package services
+Summary: services components for the dkms package.
+Group: Systemd services
+
+%description services
+services components for the dkms package.
+
+
 %prep
 %setup -q -n dkms-2.6.1
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1547578170
+export SOURCE_DATE_EPOCH=1547593658
 make  %{?_smp_mflags}
 
 
 %install
-export SOURCE_DATE_EPOCH=1547578170
+export SOURCE_DATE_EPOCH=1547593658
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp COPYING %{buildroot}/usr/share/package-licenses/dkms/COPYING
 cp debian/copyright %{buildroot}/usr/share/package-licenses/dkms/debian_copyright
 %make_install
+mkdir -p %{buildroot}/usr/lib/systemd/system
+install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dkms-new-kernel.service
+## install_append content
+mkdir -p %{buildroot}/usr/lib/systemd/system/multi-user.target.wants/
+mkdir -p %{buildroot}/usr/bin
+install -m0755 dkms-new-kernel.sh %{buildroot}/usr/bin/dkms-new-kernel.sh
+mkdir -p %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants
+ln -sf ../dkms-new-kernel.service %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/dkms-new-kernel.service
+## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -72,6 +94,7 @@ cp debian/copyright %{buildroot}/usr/share/package-licenses/dkms/debian_copyrigh
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/dkms
+/usr/bin/dkms-new-kernel.sh
 
 %files license
 %defattr(0644,root,root,0755)
@@ -81,3 +104,8 @@ cp debian/copyright %{buildroot}/usr/share/package-licenses/dkms/debian_copyrigh
 %files man
 %defattr(0644,root,root,0755)
 /usr/share/man/man8/dkms.8.gz
+
+%files services
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/dkms-new-kernel.service
+/usr/lib/systemd/system/update-triggers.target.wants/dkms-new-kernel.service

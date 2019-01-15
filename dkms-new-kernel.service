@@ -1,0 +1,7 @@
+[Unit]
+Description=Run DKMS to build modules for new kernel
+BindsTo=update-triggers.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/dkms-new-kernel.sh

@@ -1,0 +1,5 @@
+mkdir -p %{buildroot}/usr/lib/systemd/system/multi-user.target.wants/
+mkdir -p %{buildroot}/usr/bin
+install -m0755 dkms-new-kernel.sh %{buildroot}/usr/bin/dkms-new-kernel.sh
+mkdir -p %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants
+ln -sf ../dkms-new-kernel.service %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/dkms-new-kernel.service
