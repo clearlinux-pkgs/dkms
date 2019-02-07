@@ -4,10 +4,11 @@
 #
 Name     : dkms
 Version  : 2.6.1
-Release  : 2
+Release  : 3
 URL      : https://github.com/dell/dkms/archive/v2.6.1.tar.gz
 Source0  : https://github.com/dell/dkms/archive/v2.6.1.tar.gz
 Source1  : dkms-new-kernel.service
+Source2  : dkms-remove-old.service
 Summary  : megaraid2 dkms package
 Group    : Development/Tools
 License  : GPL-2.0 GPL-2.0+
@@ -16,6 +17,7 @@ Requires: dkms-license = %{version}-%{release}
 Requires: dkms-man = %{version}-%{release}
 Requires: dkms-services = %{version}-%{release}
 Patch1: 0001-Add-script-to-run-autoinstall-on-new-kernel.patch
+Patch2: 0002-Add-script-to-cleanup-modules-from-removed-kernels.patch
 
 %description
 Kernel modules for %{module_name} %{version} in a DKMS wrapper.
@@ -58,18 +60,19 @@ services components for the dkms package.
 %prep
 %setup -q -n dkms-2.6.1
 %patch1 -p1
+%patch2 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1547593658
+export SOURCE_DATE_EPOCH=1549497759
 make  %{?_smp_mflags}
 
 
 %install
-export SOURCE_DATE_EPOCH=1547593658
+export SOURCE_DATE_EPOCH=1549497759
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp COPYING %{buildroot}/usr/share/package-licenses/dkms/COPYING
@@ -77,12 +80,15 @@ cp debian/copyright %{buildroot}/usr/share/package-licenses/dkms/debian_copyrigh
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dkms-new-kernel.service
+install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/systemd/system/dkms-remove-old.service
 ## install_append content
 mkdir -p %{buildroot}/usr/lib/systemd/system/multi-user.target.wants/
 mkdir -p %{buildroot}/usr/bin
 install -m0755 dkms-new-kernel.sh %{buildroot}/usr/bin/dkms-new-kernel.sh
+install -m0755 dkms-remove-old.sh %{buildroot}/usr/bin/dkms-remove-old.sh
 mkdir -p %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants
 ln -sf ../dkms-new-kernel.service %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/dkms-new-kernel.service
+ln -sf ../dkms-remove-old.service %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/dkms-remove-old.service
 ## install_append end
 
 %files
@@ -95,6 +101,7 @@ ln -sf ../dkms-new-kernel.service %{buildroot}/usr/lib/systemd/system/update-tri
 %defattr(-,root,root,-)
 /usr/bin/dkms
 /usr/bin/dkms-new-kernel.sh
+/usr/bin/dkms-remove-old.sh
 
 %files license
 %defattr(0644,root,root,0755)
@@ -108,4 +115,6 @@ ln -sf ../dkms-new-kernel.service %{buildroot}/usr/lib/systemd/system/update-tri
 %files services
 %defattr(-,root,root,-)
 /usr/lib/systemd/system/dkms-new-kernel.service
+/usr/lib/systemd/system/dkms-remove-old.service
 /usr/lib/systemd/system/update-triggers.target.wants/dkms-new-kernel.service
+/usr/lib/systemd/system/update-triggers.target.wants/dkms-remove-old.service

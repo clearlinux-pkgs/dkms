@@ -1,0 +1,31 @@
+From 3aa41764fd4a3e018412c4f34f45d123468aa6b6 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Wed, 6 Feb 2019 15:47:41 -0800
+Subject: [PATCH] Add script to cleanup modules from removed kernels
+
+---
+ dkms-remove-old.sh | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100755 dkms-remove-old.sh
+
+diff --git a/dkms-remove-old.sh b/dkms-remove-old.sh
+new file mode 100755
+index 0000000..a6d642f
+--- /dev/null
++++ b/dkms-remove-old.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++
++dkms status | while read unit; do
++	IFS=', ' read -r driver version kernel arch curstatus <<< ${unit}
++	kernver=$(expr match "${kernel}" '\(.*\)\.')
++	kerntype=${kernel#${kernver}.}
++	kernfile="/usr/lib/kernel/org.clearlinux.${kerntype}.${kernver}"
++
++	if ! [ -f ${kernfile} ]; then
++		dkms remove ${driver}/${version} -k ${kernel}
++	fi
++done
+-- 
+2.20.1
+

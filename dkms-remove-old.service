@@ -1,0 +1,8 @@
+[Unit]
+Description=Run DKMS to cleanup modules for removed kernels
+BindsTo=update-triggers.target
+After=dkms-new-kernel.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/dkms-remove-old.sh
