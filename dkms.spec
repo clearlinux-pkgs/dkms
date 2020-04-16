@@ -4,7 +4,7 @@
 #
 Name     : dkms
 Version  : 2.8.1
-Release  : 5
+Release  : 6
 URL      : https://github.com/dell/dkms/archive/v2.8.1/dkms-2.8.1.tar.gz
 Source0  : https://github.com/dell/dkms/archive/v2.8.1/dkms-2.8.1.tar.gz
 Source1  : dkms-new-kernel.service
@@ -77,17 +77,17 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1572565871
+export SOURCE_DATE_EPOCH=1587064369
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
-export FCFLAGS="$CFLAGS -fno-lto "
-export FFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
 make  %{?_smp_mflags}
 
 
 %install
-export SOURCE_DATE_EPOCH=1572565871
+export SOURCE_DATE_EPOCH=1587064369
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp %{_builddir}/dkms-2.8.1/COPYING %{buildroot}/usr/share/package-licenses/dkms/74a8a6531a42e124df07ab5599aad63870fa0bd4
