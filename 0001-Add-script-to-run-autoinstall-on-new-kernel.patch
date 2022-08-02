@@ -1,19 +1,19 @@
-From 86a0e0fcddc91ef349fb546f176a5f138164aa08 Mon Sep 17 00:00:00 2001
+From 46aa6b6523a3b087912e26cc4d68aae9ae10c0a0 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Tue, 15 Jan 2019 14:58:11 -0800
 Subject: [PATCH] Add script to run autoinstall on new kernel
 
 ---
- dkms-new-kernel.sh | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ dkms-new-kernel.sh | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
  create mode 100755 dkms-new-kernel.sh
 
 diff --git a/dkms-new-kernel.sh b/dkms-new-kernel.sh
 new file mode 100755
-index 0000000..155ee93
+index 000000000000..23f6a96df8a5
 --- /dev/null
 +++ b/dkms-new-kernel.sh
-@@ -0,0 +1,16 @@
+@@ -0,0 +1,20 @@
 +#!/bin/sh
 +
 +CUR="`uname -r`"
@@ -29,7 +29,11 @@ index 0000000..155ee93
 +if [ "$CUR" != "$NEW" ]; then
 +	echo "Running DKMS for new kernel $NEW"
 +	dkms autoinstall -k "${NEW}"
++else
++	echo "Refreshing modules.dep and map files for kernel $CUR"
++	echo "(swupd may have overwritten them)"
++	depmod -A "${CUR}"
 +fi
 -- 
-2.26.1
+2.37.1
 
