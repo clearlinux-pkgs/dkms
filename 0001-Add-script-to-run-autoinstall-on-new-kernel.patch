@@ -1,38 +1,36 @@
-From a35f1dabbc115d3b51bacbc950ee709d68e81970 Mon Sep 17 00:00:00 2001
+From a1bb01169a8f218092988ca873a170da8252fe53 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Tue, 15 Jan 2019 14:58:11 -0800
 Subject: [PATCH] Add script to run autoinstall on new kernel
 
 ---
- dkms-new-kernel.sh | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ dkms-new-kernel.sh | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
  create mode 100755 dkms-new-kernel.sh
 
 diff --git a/dkms-new-kernel.sh b/dkms-new-kernel.sh
 new file mode 100755
-index 000000000000..851fee77a925
+index 000000000000..92076e5f8baa
 --- /dev/null
 +++ b/dkms-new-kernel.sh
-@@ -0,0 +1,19 @@
-+#!/bin/sh
+@@ -0,0 +1,17 @@
++#!/bin/bash
 +
-+CUR="`uname -r`"
-+SUF="`uname -r| sed 's/.*[.]//'`"
-+DEF="/usr/lib/kernel/default-$SUF"
++STATUS=0
 +
-+if [ ! -e $DEF ]; then
-+	exit 0
-+fi
-+
-+NEW="`readlink $DEF | sed 's/org.clearlinux.\([a-z][a-z0-9_-]*\).\(.*\)/\2.\1/'`"
-+
-+if [ "$CUR" != "$NEW" ]; then
-+	echo "Running DKMS for new kernel $NEW"
++# Run dkms autoinstall for all the default kernels, starting with the
++# current variant
++for LINK in /usr/lib/kernel/default-*; do
++	NEW="`readlink $LINK | sed 's/org.clearlinux.\([a-z][a-z0-9_-]*\).\(.*\)/\2.\1/'`"
 +	dkms autoinstall -k "${NEW}"
-+fi
-+
-+echo "Refreshing modules.dep and map files for kernel $NEW if needed"
-+depmod -A "${NEW}"
++	status=$?
++	if [[ 0 -ne $status ]]; then
++		STATUS=$status
++	fi
++	echo "Refreshing modules.dep and map files for kernel $NEW if needed"
++	depmod -A "${NEW}"
++done
++exit $STATUS
 -- 
-2.37.1
+2.39.1
 

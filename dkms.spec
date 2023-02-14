@@ -4,7 +4,7 @@
 #
 Name     : dkms
 Version  : 3.0.10
-Release  : 24
+Release  : 25
 URL      : https://github.com/dell/dkms/archive/v3.0.10/dkms-3.0.10.tar.gz
 Source0  : https://github.com/dell/dkms/archive/v3.0.10/dkms-3.0.10.tar.gz
 Source1  : dkms-new-kernel.service
@@ -82,7 +82,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1672763751
+export SOURCE_DATE_EPOCH=1676415465
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
 export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
@@ -92,7 +92,7 @@ make  %{?_smp_mflags}  dkms
 
 
 %install
-export SOURCE_DATE_EPOCH=1672763751
+export SOURCE_DATE_EPOCH=1676415465
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp %{_builddir}/dkms-%{version}/COPYING %{buildroot}/usr/share/package-licenses/dkms/4cc77b90af91e615a64ae04893fdffa7939db84c || :
