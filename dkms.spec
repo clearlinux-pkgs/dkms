@@ -4,7 +4,7 @@
 #
 Name     : dkms
 Version  : 3.0.10
-Release  : 25
+Release  : 26
 URL      : https://github.com/dell/dkms/archive/v3.0.10/dkms-3.0.10.tar.gz
 Source0  : https://github.com/dell/dkms/archive/v3.0.10/dkms-3.0.10.tar.gz
 Source1  : dkms-new-kernel.service
@@ -22,6 +22,7 @@ Requires: dkms-services = %{version}-%{release}
 %define debug_package %{nil}
 Patch1: 0001-Add-script-to-run-autoinstall-on-new-kernel.patch
 Patch2: 0002-Add-script-to-cleanup-modules-from-removed-kernels.patch
+Patch3: 0003-Customize-for-Clear-Linux.patch
 
 %description
 Dynamic Kernel Module System (DKMS)
@@ -76,13 +77,14 @@ services components for the dkms package.
 cd %{_builddir}/dkms-3.0.10
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1676415465
+export SOURCE_DATE_EPOCH=1676423157
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
 export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
@@ -92,7 +94,7 @@ make  %{?_smp_mflags}  dkms
 
 
 %install
-export SOURCE_DATE_EPOCH=1676415465
+export SOURCE_DATE_EPOCH=1676423157
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp %{_builddir}/dkms-%{version}/COPYING %{buildroot}/usr/share/package-licenses/dkms/4cc77b90af91e615a64ae04893fdffa7939db84c || :
