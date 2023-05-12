@@ -5,4 +5,4 @@ After=dkms-new-kernel.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/dkms-remove-old.sh
+ExecStart=/usr/bin/dkms-remove-old

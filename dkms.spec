@@ -5,7 +5,7 @@
 #
 Name     : dkms
 Version  : 3.0.11
-Release  : 27
+Release  : 28
 URL      : https://github.com/dell/dkms/archive/v3.0.11/dkms-3.0.11.tar.gz
 Source0  : https://github.com/dell/dkms/archive/v3.0.11/dkms-3.0.11.tar.gz
 Source1  : dkms-new-kernel.service
@@ -86,7 +86,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1683916821
+export SOURCE_DATE_EPOCH=1683916937
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -96,7 +96,7 @@ make  %{?_smp_mflags}  dkms
 
 
 %install
-export SOURCE_DATE_EPOCH=1683916821
+export SOURCE_DATE_EPOCH=1683916937
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp %{_builddir}/dkms-%{version}/COPYING %{buildroot}/usr/share/package-licenses/dkms/4cc77b90af91e615a64ae04893fdffa7939db84c || :
@@ -109,8 +109,8 @@ rm -f %{buildroot}*/var/lib/dkms/dkms_dbversion
 ## install_append content
 mkdir -p %{buildroot}/usr/lib/systemd/system/multi-user.target.wants/
 mkdir -p %{buildroot}/usr/bin
-install -m0755 dkms-new-kernel.sh %{buildroot}/usr/bin/dkms-new-kernel.sh
-install -m0755 dkms-remove-old.sh %{buildroot}/usr/bin/dkms-remove-old.sh
+install -m0755 dkms-new-kernel.sh %{buildroot}/usr/bin/dkms-new-kernel
+install -m0755 dkms-remove-old.sh %{buildroot}/usr/bin/dkms-remove-old
 mkdir -p %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants
 ln -sf ../dkms-new-kernel.service %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/dkms-new-kernel.service
 ln -sf ../dkms-remove-old.service %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/dkms-remove-old.service
@@ -124,8 +124,8 @@ ln -sf ../dkms-remove-old.service %{buildroot}/usr/lib/systemd/system/update-tri
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/dkms
-/usr/bin/dkms-new-kernel.sh
-/usr/bin/dkms-remove-old.sh
+/usr/bin/dkms-new-kernel
+/usr/bin/dkms-remove-old
 
 %files data
 %defattr(-,root,root,-)

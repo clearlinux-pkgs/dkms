@@ -1,7 +1,7 @@
 mkdir -p %{buildroot}/usr/lib/systemd/system/multi-user.target.wants/
 mkdir -p %{buildroot}/usr/bin
-install -m0755 dkms-new-kernel.sh %{buildroot}/usr/bin/dkms-new-kernel.sh
-install -m0755 dkms-remove-old.sh %{buildroot}/usr/bin/dkms-remove-old.sh
+install -m0755 dkms-new-kernel.sh %{buildroot}/usr/bin/dkms-new-kernel
+install -m0755 dkms-remove-old.sh %{buildroot}/usr/bin/dkms-remove-old
 mkdir -p %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants
 ln -sf ../dkms-new-kernel.service %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/dkms-new-kernel.service
 ln -sf ../dkms-remove-old.service %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/dkms-remove-old.service

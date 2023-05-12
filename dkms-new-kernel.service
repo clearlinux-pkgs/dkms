@@ -4,4 +4,4 @@ BindsTo=update-triggers.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/dkms-new-kernel.sh
+ExecStart=/usr/bin/dkms-new-kernel
