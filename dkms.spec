@@ -4,10 +4,10 @@
 # Using build pattern: make
 #
 Name     : dkms
-Version  : 3.0.11
-Release  : 28
-URL      : https://github.com/dell/dkms/archive/v3.0.11/dkms-3.0.11.tar.gz
-Source0  : https://github.com/dell/dkms/archive/v3.0.11/dkms-3.0.11.tar.gz
+Version  : 3.0.12
+Release  : 29
+URL      : https://github.com/dell/dkms/archive/v3.0.12/dkms-3.0.12.tar.gz
+Source0  : https://github.com/dell/dkms/archive/v3.0.12/dkms-3.0.12.tar.gz
 Source1  : dkms-new-kernel.service
 Source2  : dkms-remove-old.service
 Summary  : No detailed summary available
@@ -75,18 +75,18 @@ services components for the dkms package.
 
 
 %prep
-%setup -q -n dkms-3.0.11
-cd %{_builddir}/dkms-3.0.11
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
+%setup -q -n dkms-3.0.12
+cd %{_builddir}/dkms-3.0.12
+%patch -P 1 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1683916937
+export SOURCE_DATE_EPOCH=1695672896
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -96,7 +96,7 @@ make  %{?_smp_mflags}  dkms
 
 
 %install
-export SOURCE_DATE_EPOCH=1683916937
+export SOURCE_DATE_EPOCH=1695672896
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp %{_builddir}/dkms-%{version}/COPYING %{buildroot}/usr/share/package-licenses/dkms/4cc77b90af91e615a64ae04893fdffa7939db84c || :
@@ -137,7 +137,7 @@ ln -sf ../dkms-remove-old.service %{buildroot}/usr/lib/systemd/system/update-tri
 
 %files man
 %defattr(0644,root,root,0755)
-/usr/share/man/man8/dkms.8.gz
+/usr/share/man/man8/dkms.8
 
 %files services
 %defattr(-,root,root,-)
