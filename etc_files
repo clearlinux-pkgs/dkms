@@ -1,0 +1,17 @@
+/etc/:
+/etc/dkms/framework.conf.d:
+/etc/dkms:
+/etc/kernel/install.d:
+/etc/kernel/postinst.d:
+/etc/kernel/prerm.d:
+/etc/kernel:
+40-dkms.install
+dkms
+dkms
+dkms
+framework.conf
+framework.conf.d
+install.d
+kernel
+postinst.d
+prerm.d
