@@ -1,3 +1,4 @@
+stateless.patch
 0001-Add-script-to-run-autoinstall-on-new-kernel.patch
 0002-Add-script-to-cleanup-modules-from-removed-kernels.patch
 0003-Customize-for-Clear-Linux.patch

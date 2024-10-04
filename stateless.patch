@@ -1,0 +1,50 @@
+From be35ca65ddd6084e61f71b17317677abb52dd228 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Fri, 4 Oct 2024 09:41:40 -0700
+Subject: [PATCH] Stateless changes
+
+---
+ Makefile                 |  2 +-
+ kernel_install.d_dkms.in | 12 ++++++++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 0fca9a3209ca..2a31774829a2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -10,7 +10,7 @@ SHELL=bash
+ SBIN = /usr/sbin
+ LIBDIR = /usr/lib/dkms
+ MODDIR = /lib/modules
+-KCONF = /etc/kernel
++KCONF = /usr/lib/kernel
+ KINSTALL = /usr/lib/kernel/install.d
+ SYSTEMD = /usr/lib/systemd/system
+ 
+diff --git a/kernel_install.d_dkms.in b/kernel_install.d_dkms.in
+index 35c004b02e98..9864acb97948 100755
+--- a/kernel_install.d_dkms.in
++++ b/kernel_install.d_dkms.in
+@@ -1,9 +1,17 @@
+ #!/bin/sh
+ 
+ if [ "$1" = "add" ]; then
+-	@KCONFDIR@/postinst.d/dkms "$2"
++	if [[ -x /etc/kernel/postinst.d/dkms ]]; then
++		/etc/kernel/postinst.d/dkms "$2"
++	else
++		@KCONFDIR@/postinst.d/dkms "$2"
++	fi
+ fi
+ 
+ if [ "$1" = "remove" ]; then
+-	@KCONFDIR@/prerm.d/dkms "$2"
++	if [[ -x /etc/kernel/prerm.d/dkms ]]; then
++		/etc/kernel/prerm.d/dkms "$2"
++	else
++		@KCONFDIR@/prerm.d/dkms "$2"
++	fi
+ fi
+-- 
+2.46.2
+

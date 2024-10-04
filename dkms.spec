@@ -7,7 +7,7 @@
 #
 Name     : dkms
 Version  : 3.1.0
-Release  : 32
+Release  : 33
 URL      : https://github.com/dell/dkms/archive/v3.1.0/dkms-3.1.0.tar.gz
 Source0  : https://github.com/dell/dkms/archive/v3.1.0/dkms-3.1.0.tar.gz
 Source1  : dkms-new-kernel.service
@@ -25,9 +25,10 @@ Requires: dkms-services = %{version}-%{release}
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
-Patch1: 0001-Add-script-to-run-autoinstall-on-new-kernel.patch
-Patch2: 0002-Add-script-to-cleanup-modules-from-removed-kernels.patch
-Patch3: 0003-Customize-for-Clear-Linux.patch
+Patch1: stateless.patch
+Patch2: 0001-Add-script-to-run-autoinstall-on-new-kernel.patch
+Patch3: 0002-Add-script-to-cleanup-modules-from-removed-kernels.patch
+Patch4: 0003-Customize-for-Clear-Linux.patch
 
 %description
 Dynamic Kernel Module System (DKMS)
@@ -93,13 +94,14 @@ cd %{_builddir}/dkms-3.1.0
 %patch -P 1 -p1
 %patch -P 2 -p1
 %patch -P 3 -p1
+%patch -P 4 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1728058958
+export SOURCE_DATE_EPOCH=1728060254
 export GCC_IGNORE_WERROR=1
 CLEAR_INTERMEDIATE_CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 CLEAR_INTERMEDIATE_FCFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -127,7 +129,7 @@ FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
 FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
 ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
 LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
-export SOURCE_DATE_EPOCH=1728058958
+export SOURCE_DATE_EPOCH=1728060254
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp %{_builddir}/dkms-%{version}/COPYING %{buildroot}/usr/share/package-licenses/dkms/4cc77b90af91e615a64ae04893fdffa7939db84c || :
@@ -156,6 +158,8 @@ ln -sf ../dkms-remove-old.service %{buildroot}/usr/lib/systemd/system/update-tri
 /usr/lib/dkms/common.postinst
 /usr/lib/dkms/dkms_autoinstaller
 /usr/lib/kernel/install.d/40-dkms.install
+/usr/lib/kernel/postinst.d/dkms
+/usr/lib/kernel/prerm.d/dkms
 
 %files bin
 %defattr(-,root,root,-)
