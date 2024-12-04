@@ -1,0 +1,38 @@
+From f30c14087c3dc0e050458d0e17ce3adb92a241f9 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Tue, 3 Dec 2024 16:51:08 -0800
+Subject: [PATCH] Add --force option to unbuild and uninstall
+
+Allow unbuild-ing and uninstall-ing a module that is no longer completely built, when
+--force is supplied. In Clear Linux, we may remove the kernel and the
+contents of /lib/modules before the hook to have dkms remove all traces
+of the module, so we need a way to ensure cleanup.
+---
+ dkms.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dkms.in b/dkms.in
+index 2eb535e9f034..0d97da4af964 100644
+--- a/dkms.in
++++ b/dkms.in
+@@ -1703,7 +1703,7 @@ module_is_added_or_die()
+ 
+ maybe_unbuild_module()
+ {
+-    is_module_built "$module" "$module_version" "$1" "$2" || {
++    [[ $force ]] || is_module_built "$module" "$module_version" "$1" "$2" || {
+         echo "Module $module/$module_version is not built for kernel $1 ($2)."\
+             "Skipping..."
+         return 0
+@@ -1714,7 +1714,7 @@ maybe_unbuild_module()
+ 
+ maybe_uninstall_module()
+ {
+-    is_module_installed "$module" "$module_version" "$1" "$2" || {
++    [[ $force ]] || is_module_installed "$module" "$module_version" "$1" "$2" || {
+         echo "Module $module/$module_version is not installed for kernel $1 ($2)."\
+             "Skipping..."
+         return 0
+-- 
+2.47.1
+

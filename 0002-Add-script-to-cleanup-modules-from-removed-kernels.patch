@@ -23,7 +23,7 @@ index 000000000000..4f4ad0be6271
 +	kernfile="/usr/lib/kernel/org.clearlinux.${kerntype}.${kernver}"
 +
 +	if ! [[ -f ${kernfile} ]]; then
-+		dkms remove ${driver}/${version} -k ${kernel}
++		dkms remove --force ${driver}/${version} -k ${kernel}
 +	fi
 +done
 -- 

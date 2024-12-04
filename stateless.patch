@@ -5,7 +5,7 @@ Subject: [PATCH] Stateless changes
 
 ---
  Makefile                 |  2 +-
- kernel_install.d_dkms.in | 12 ++++++++++--
+ debian_kernel_install.d.in | 12 ++++++++++--
  2 files changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/Makefile b/Makefile
@@ -21,10 +21,10 @@ index 0fca9a3209ca..2a31774829a2 100644
  KINSTALL = /usr/lib/kernel/install.d
  SYSTEMD = /usr/lib/systemd/system
  
-diff --git a/kernel_install.d_dkms.in b/kernel_install.d_dkms.in
+diff --git a/debian_kernel_install.d.in b/debian_kernel_install.d.in
 index 35c004b02e98..9864acb97948 100755
---- a/kernel_install.d_dkms.in
-+++ b/kernel_install.d_dkms.in
+--- a/debian_kernel_install.d.in
++++ b/debian_kernel_install.d.in
 @@ -1,9 +1,17 @@
  #!/bin/sh
  
