@@ -6,10 +6,10 @@
 # autospec commit: 9594167
 #
 Name     : dkms
-Version  : 3.2.0
-Release  : 42
-URL      : https://github.com/dell/dkms/archive/v3.2.0/dkms-3.2.0.tar.gz
-Source0  : https://github.com/dell/dkms/archive/v3.2.0/dkms-3.2.0.tar.gz
+Version  : 3.2.1
+Release  : 43
+URL      : https://github.com/dell/dkms/archive/v3.2.1/dkms-3.2.1.tar.gz
+Source0  : https://github.com/dell/dkms/archive/v3.2.1/dkms-3.2.1.tar.gz
 Source1  : dkms-new-kernel.service
 Source2  : dkms-remove-old.service
 Source3  : dkms.tmpfiles
@@ -89,8 +89,8 @@ services components for the dkms package.
 
 
 %prep
-%setup -q -n dkms-3.2.0
-cd %{_builddir}/dkms-3.2.0
+%setup -q -n dkms-3.2.1
+cd %{_builddir}/dkms-3.2.1
 %patch -P 1 -p1
 %patch -P 2 -p1
 %patch -P 3 -p1
@@ -102,7 +102,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1746641323
+export SOURCE_DATE_EPOCH=1747060306
 export GCC_IGNORE_WERROR=1
 CLEAR_INTERMEDIATE_CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 CLEAR_INTERMEDIATE_FCFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -130,7 +130,7 @@ FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
 FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
 ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
 LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
-export SOURCE_DATE_EPOCH=1746641323
+export SOURCE_DATE_EPOCH=1747060306
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dkms
 cp %{_builddir}/dkms-%{version}/COPYING %{buildroot}/usr/share/package-licenses/dkms/5b48b90e1bafdbede57b01227ade30d51f4b2a3c || :
